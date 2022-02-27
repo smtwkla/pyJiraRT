@@ -5,6 +5,8 @@ from jira import JIRA
 import json
 import html
 import secrets
+import settings
+
 
 def fmt_summary(summary, create_date, due_date):
     month = "%m"
@@ -42,12 +44,17 @@ def check_if_last_day_of_month(dt):
 
 
 def lambda_handler(event, context):
+    """
+    MAIN FUNCTION
+    Call this using scheduler to process entries
+    """
+
 
     url_run_date = url_run_month = url_run_year = url_run_proj = None
 
-    jira = JIRA(server='https://smtw-jira.atlassian.net/', basic_auth=(secrets.USER_NAME, secrets.PASSWORD))
+    jira = JIRA(server=secrets.SITE_NAME, basic_auth=(secrets.USER_NAME, secrets.PASSWORD))
 
-    # run_date = datetime.datetime(2022, 1, 18)
+    # run_date = datetime.datetime(2022, 1, 18) # run for a specific date - for testing purposes
     run_date = datetime.datetime.now()
 
     try:
@@ -64,7 +71,7 @@ def lambda_handler(event, context):
     except (TypeError, ValueError, KeyError):
         pass
 
-    log_task = jira.create_issue(project="ARTL", summary=run_date.strftime("%Y-%m-%d"), issuetype={"name": "Task"})
+    log_task = jira.create_issue(project=settings.AutoTask_Project_Key, summary=run_date.strftime("%Y-%m-%d"), issuetype={"name": "Task"})
 
     jql = "summary ~ AutoRT AND status = done" + ((" AND project =" + url_run_proj) if url_run_proj is not None else "")
     rt_issues = jira.search_issues(jql_str=jql)
@@ -136,7 +143,7 @@ def lambda_handler(event, context):
 
     return {
         'statusCode': 200,
-        'body': json.dumps('Hello from Lambda! ' + log_msg)
+        'body': json.dumps('Lambda Function run.  ' + log_msg)
     }
 
 

@@ -2,3 +2,4 @@ venv/
 secrets.py
 .idea/
 __pycache__/
+site-packages.zip
