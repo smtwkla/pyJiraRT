@@ -11,7 +11,7 @@ Creation of recurring tasks in JIRA can be automated with this tool. Tasks can b
 
 ## Format:
 
-**AutoRT Text_of_Title_to_Create [Date Formating macros] {<date_to_create> | *, <month_tocreate> | *, <create_before_days> | 0 }** 
+**AutoRT Text_of_Title_to_Create [Date Formating macros] {<date_to_create> | *, <month_tocreate> | *, <create_before_days> | 0 }**
 
 ## Date Formatting Macros:
 - %M - Month of Due Date
